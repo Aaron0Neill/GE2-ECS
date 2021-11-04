@@ -1,6 +1,6 @@
 CC				:= g++
 #add flags if needed
-CFLAGS			:= -g 
+CFLAGS			:= -g -Wall
 
 #Where to put the object files
 OBJ_DIR			:= ./bin
@@ -9,7 +9,7 @@ OBJ_DIR			:= ./bin
 SFML_LDFLAGS 	:= -lsfml-graphics -lsfml-window -lsfml-system
 #SDL Include Flags + Lib Flags
 SDL_CFLAGS 		:= $(shell sdl2-config --cflags)
-SDL_LDFLAGS 	:= $(shell sdl2-config --libs) -lSDL2_image -lSDL2_ttf
+SDL_LDFLAGS 	:= $(shell sdl2-config --libs) #-lSDL2_image #-lSDL2_ttf
 
 #final Include Flags (Add SFML or SDL here if needs be)
 CXXFLAGS 		:= -I. -I./include $(SDL_CFLAGS) $(SDL_LDFLAGS)
@@ -23,7 +23,7 @@ OBJ_FILES		:= $(patsubst %.cpp, %.o, $(SRC_FILES))
 #changes from ./src to whatever the OBJ_DIR is 
 #*Should be commented out if there's nested cpp folders (nesting cpp folders means obj file gets placed \
 #with the cpp for at the minute - hopefully will be tuned soon*
-#OBJ_TARGET		:= $(foreach obj,$(OBJ_FILES), $(lastword $(subst /, $(OBJ_DIR)/,$(obj))))
+OBJ_TARGET		:= $(foreach obj,$(OBJ_FILES), $(lastword $(subst /, $(OBJ_DIR)/,$(obj))))
 
 #add more /* if more folders are nested
 NESTED_CPP		:= ./src/*.o ./src/*/*.o ./src/*/*/*.o
@@ -37,11 +37,11 @@ $(OBJ_DIR)/%.o : ./src/%.cpp
 
 #Change OBJ_TARGET to OBJ_FILES if there is nested cpp folders (CURRENTLY THE WAY TO WORK WITH NESTED CPP's)
 #whatever follows build: needs to be placed after $@ too
-build: $(OBJ_FILES)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(CXXFLAGS)
+build: $(OBJ_TARGET)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_TARGET) $(CXXFLAGS)
 	
 .PHONY: clean
 
 #change the variable depending on if you used a nested folder or not
 clean:
-	rm -f $(NESTED_CPP)
+	rm -f $(OBJ_FOLDER)
