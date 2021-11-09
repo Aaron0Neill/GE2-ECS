@@ -20,7 +20,23 @@ namespace ECS
 	public:
 		void insertData(Entity t_entity, T t_component);
 
-		void removeData(Entity t_entity);
+		void removeData(Entity t_entity)
+		{
+			// Copy element at end into deleted element's place to maintain density
+			size_t indexOfRemovedEntity = m_entityToIndexMap[t_entity];
+			size_t indexOfLastElement = m_totalSize - 1;
+			m_components[indexOfRemovedEntity] = m_components[indexOfLastElement];
+
+			// Update map to point to moved spot
+			Entity entityOfLastElement = m_indexToEntityMap[indexOfLastElement];
+			m_entityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;
+			m_indexToEntityMap[indexOfRemovedEntity] = entityOfLastElement;
+
+			m_entityToIndexMap.erase(t_entity);
+			m_indexToEntityMap.erase(indexOfLastElement);
+
+			--m_totalSize;
+		}
 
 		T& getData(Entity t_entity);
 
@@ -42,7 +58,7 @@ namespace ECS
 	template<typename T>
 	inline void ComponentArray<T>::insertData(Entity t_entity, T t_component)
 	{
-		if (m_entityToIndexMap.count(t_entity))
+		if (!m_entityToIndexMap.count(t_entity))
 		{
 			m_entityToIndexMap.emplace(t_entity, m_totalSize);
 			m_indexToEntityMap.emplace(m_totalSize, t_entity);
@@ -52,45 +68,19 @@ namespace ECS
 		else
 			std::cout << "Entity already contains component\n";
 	}
-
+	 
 	//#####################################################
 
-	template<typename T>
-	inline void ComponentArray<T>::removeData(Entity t_entity)
-	{
-		if (m_entityToIndexMap.count(t_entity))
-		{
-			// Copy element at end into deleted element's place to maintain density
-			size_t indexOfRemovedEntity = m_entityToIndexMap.at(t_entity);
-			size_t indexOfLastElement = m_totalSize - 1;
-			m_components[indexOfRemovedEntity] = m_components[indexOfLastElement];
+	//template<typename T>
+	//inline void ComponentArray<T>::removeData(Entity t_entity)
 
-			// Update map to point to moved spot
-			Entity entityOfLastElement = m_indexToEntityMap.at(indexOfLastElement);
-			m_entityToIndexMap.at(entityOfLastElement) = indexOfRemovedEntity;
-			m_indexToEntityMap.at(indexOfRemovedEntity) = entityOfLastElement;
-
-			m_entityToIndexMap.erase(t_entity);
-			m_indexToEntityMap.erase(indexOfLastElement);
-
-			--m_totalSize;
-		}
-		else
-		{
-			std::cout << "Can't remove Entity as it doesn't exist\n";
-		}
-	}
 
 	//#####################################################
 
 	template<typename T>
 	inline T& ComponentArray<T>::getData(Entity t_entity)
 	{
-
-		if (m_entityToIndexMap.count(t_entity))
-			return m_components[m_entityToIndexMap.at(t_entity)];
-
-		return T();
+		return m_components[m_entityToIndexMap.at(t_entity)];
 	}
 
 	//#####################################################

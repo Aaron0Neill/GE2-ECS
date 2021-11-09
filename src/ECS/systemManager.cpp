@@ -19,7 +19,7 @@ void SystemManager::entitySignatureChange(Entity t_entity, Signature t_signature
 	{
 		auto const& type = pair.first;
 		auto const& system = pair.second;
-		auto const& systemSignature = m_signatures.at(type);
+		auto const& systemSignature = m_signatures[type];
 
 		// Entity signature matches system signature - insert into set
 		if ((t_signature & systemSignature) == systemSignature)

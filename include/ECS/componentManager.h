@@ -49,12 +49,7 @@ namespace ECS
 		{
 			const char* typeName = typeid(T).name();
 
-			if (m_componentType.count(typeName))
-				return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[typeName]);
-			else
-				std::cout << "Component has not been registered\n";
-
-			return nullptr;
+			return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[typeName]);
 		}
 	};
 
@@ -83,12 +78,7 @@ namespace ECS
 	inline ComponentType ComponentManager::getComponentType()
 	{
 		const char* typeName = typeid(T).name();
-
-		if (m_componentType.count(typeName))
-			return m_componentType.at(typeName);
-		else
-			std::cout << "Component doesn't exist\n";
-		return ComponentType();
+		return m_componentType[typeName];
 	}
 
 	//#####################################################
@@ -112,7 +102,7 @@ namespace ECS
 	template<typename T>
 	inline T& ComponentManager::getComponent(Entity t_entity)
 	{
-		getComponentArray<T>()->getData(t_entity);
+		return getComponentArray<T>()->getData(t_entity);
 	}
 }
 

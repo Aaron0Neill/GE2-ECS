@@ -1,6 +1,8 @@
 #include "ECS/ECS.h"
 using namespace ECS;
 
+Manager* Manager::m_instance{ nullptr };
+
 Manager::Manager() :
 	m_componentManager(std::make_unique<ComponentManager>()),
 	m_entityManager(std::make_unique<EntityManager>()),
@@ -8,10 +10,24 @@ Manager::Manager() :
 {
 }
 
+//###############################
+
+Manager* ECS::Manager::getInstance()
+{
+	if (m_instance == nullptr)
+		m_instance = new Manager();
+
+	return m_instance;
+}
+
+//###############################
+
 Entity Manager::createEntity()
 {
 	return m_entityManager->createEntity();
 }
+
+//###############################
 
 void Manager::destroyEntity(Entity t_entity)
 {
@@ -20,8 +36,4 @@ void Manager::destroyEntity(Entity t_entity)
 	m_systemManager->entityDestroyed(t_entity);
 }
 
-template<typename T>
-void Manager::setSystemSignature(Signature t_signature)
-{
-	m_systemManager->setSignature<T>(t_signature);
-}
+//###############################

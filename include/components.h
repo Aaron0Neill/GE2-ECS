@@ -3,18 +3,27 @@
 
 struct Health
 {
-	int m_health;
+	int health;
 };
 
-struct Lives
+struct Input
 {
-	int m_lives;
+	float x;
+	float y;
+};
+
+struct Box
+{
+	Box() = default;
+	Box(float t_w, float t_h) : w(t_w), h(t_h) {}
+	float w;
+	float h;
 };
 
 struct Position
 {
-	float m_x;
-	float m_y;
+	float x;
+	float y;
 };
 
 #endif

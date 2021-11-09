@@ -4,7 +4,6 @@
 #include <bitset>
 namespace ECS
 {
-
 	using ComponentType = std::uint8_t;
 
 	const ComponentType MAX_COMPONENTS = 16;

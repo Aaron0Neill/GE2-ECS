@@ -1,11 +1,13 @@
 #ifndef GAME_INCLUDE
 #define GAME_INCLUDE
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "clock.h"
 #include "ECS/ECS.h"
 #include "components.h"
-#include "positionSystem.h"
+#include "controlSystem.h"
+#include "renderSystem.h"
+#include <vector>
 
 class Game
 {
@@ -24,8 +26,12 @@ private:
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
     bool m_running;
-    ECS::Manager m_ecs;
-    std::shared_ptr<PositionSystem> m_posSystem;
+    ECS::Manager* m_ecs;
+    ControlSystem* m_controlSystem;
+    RenderSystem* m_renderSystem;
+    std::vector<ECS::Entity> m_entities;
+    ECS::Entity e;
+    bool t;
 };
 
 #endif
