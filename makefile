@@ -1,6 +1,6 @@
 CC				:= g++
 #add flags if needed
-CFLAGS			:= -g -Wall
+CFLAGS			:= -g
 
 #Where to put the object files
 OBJ_DIR			:= ./bin
@@ -15,7 +15,7 @@ SDL_LDFLAGS 	:= $(shell sdl2-config --libs) #-lSDL2_image #-lSDL2_ttf
 CXXFLAGS 		:= -I. -I./include $(SDL_CFLAGS) $(SDL_LDFLAGS)
 
 #searches for all cpps inside the src file (WONT GO INTO FOLDERS)
-SRC_FILES		:= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp) $(wildcard src/*/*/*.cpp)
+SRC_FILES		:= $(wildcard src/*.cpp) $(wildcard src/*/*.cpp)
 
 #modifies extension on all cpps to object files
 OBJ_FILES		:= $(patsubst %.cpp, %.o, $(SRC_FILES))
@@ -26,7 +26,7 @@ OBJ_FILES		:= $(patsubst %.cpp, %.o, $(SRC_FILES))
 OBJ_TARGET		:= $(foreach obj,$(OBJ_FILES), $(lastword $(subst /, $(OBJ_DIR)/,$(obj))))
 
 #add more /* if more folders are nested
-NESTED_CPP		:= ./src/*.o ./src/*/*.o ./src/*/*/*.o
+NESTED_CPP		:= $(OBJ_FILES)
 OBJ_FOLDER		:= $(OBJ_DIR)/*.o
 
 #for every object file it gets the cpp and creates an object file inside the DIR
@@ -37,11 +37,16 @@ $(OBJ_DIR)/%.o : ./src/%.cpp
 
 #Change OBJ_TARGET to OBJ_FILES if there is nested cpp folders (CURRENTLY THE WAY TO WORK WITH NESTED CPP's)
 #whatever follows build: needs to be placed after $@ too
-build: $(OBJ_TARGET)
-	$(CC) $(CFLAGS) -o $@ $(OBJ_TARGET) $(CXXFLAGS)
+build: $(OBJ_FILES)
+	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(CXXFLAGS)
 	
 .PHONY: clean
 
+.PHONY: original
+
 #change the variable depending on if you used a nested folder or not
 clean:
-	rm -f $(OBJ_FOLDER)
+	rm -f $(NESTED_CPP)
+
+original:
+	$(CC) $(CFLAGS) -o $@ $(SRC_FILES) $(CXXFLAGS)

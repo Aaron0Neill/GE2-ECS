@@ -3,6 +3,9 @@
 
 #include <SDL2/SDL.h>
 #include "clock.h"
+#include "ECS/ECS.h"
+#include "components.h"
+#include "positionSystem.h"
 
 class Game
 {
@@ -21,6 +24,8 @@ private:
     SDL_Window* m_window;
     SDL_Renderer* m_renderer;
     bool m_running;
+    ECS::Manager m_ecs;
+    std::shared_ptr<PositionSystem> m_posSystem;
 };
 
 #endif

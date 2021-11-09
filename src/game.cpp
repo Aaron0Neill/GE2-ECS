@@ -7,6 +7,13 @@ Game::Game() :
 	SDL_Init(SDL_INIT_EVERYTHING);
 
 	initWindow();
+
+	m_ecs.registerComponent<Health>();
+	m_ecs.registerComponent<Lives>();
+	m_ecs.registerComponent<Position>();
+
+	m_posSystem = m_ecs.registerSystem<PositionSystem>();
+	m_posSystem->update();
 }
 
 //###############################
