@@ -19,15 +19,15 @@ namespace ECS
 		ComponentType getComponentType();
 
 		template<typename T>
-		void addComponent(Entity t_entity, T t_component);
+		void addComponent(EntityID t_entity, T t_component);
 
 		template<typename T>
-		void removeComponent(Entity t_entity);
+		void removeComponent(EntityID t_entity);
 
 		template<typename T>
-		T& getComponent(Entity t_entity);
+		T* getComponent(EntityID t_entity);
 
-		void entityDestroyed(Entity t_entity)
+		void entityDestroyed(EntityID t_entity)
 		{
 			for (auto const& pair : m_componentArrays)
 			{
@@ -49,12 +49,7 @@ namespace ECS
 		{
 			const char* typeName = typeid(T).name();
 
-			if (m_componentType.count(typeName))
-				return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[typeName]);
-			else
-				std::cout << "Component has not been registered\n";
-
-			return nullptr;
+			return std::static_pointer_cast<ComponentArray<T>>(m_componentArrays[typeName]);
 		}
 	};
 
@@ -83,18 +78,13 @@ namespace ECS
 	inline ComponentType ComponentManager::getComponentType()
 	{
 		const char* typeName = typeid(T).name();
-
-		if (m_componentType.count(typeName))
-			return m_componentType.at(typeName);
-		else
-			std::cout << "Component doesn't exist\n";
-		return ComponentType();
+		return m_componentType[typeName];
 	}
 
 	//#####################################################
 
 	template<typename T>
-	inline void ComponentManager::addComponent(Entity t_entity, T t_component)
+	inline void ComponentManager::addComponent(EntityID t_entity, T t_component)
 	{
 		getComponentArray<T>()->insertData(t_entity, t_component);
 	}
@@ -102,7 +92,7 @@ namespace ECS
 	//#####################################################
 
 	template<typename T>
-	inline void ComponentManager::removeComponent(Entity t_entity)
+	inline void ComponentManager::removeComponent(EntityID t_entity)
 	{
 		getComponentArray<T>()->removeData(t_entity);
 	}
@@ -110,9 +100,9 @@ namespace ECS
 	//#####################################################
 
 	template<typename T>
-	inline T& ComponentManager::getComponent(Entity t_entity)
+	inline T* ComponentManager::getComponent(EntityID t_entity)
 	{
-		getComponentArray<T>()->getData(t_entity);
+		return getComponentArray<T>()->getData(t_entity);
 	}
 }
 

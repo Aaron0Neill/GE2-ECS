@@ -4,27 +4,27 @@ using namespace ECS;
 EntityManager::EntityManager() : 
 	m_livingEntityCount(0)
 {
-	for (Entity e = 0; e < MAX_ENTITIES; ++e)
+	for (EntityID e = 0; e < MAX_ENTITIES; ++e)
 		m_availableEntities.push(e);
 }
 
 //###########################################################################
 
-Entity EntityManager::createEntity()
+EntityID EntityManager::createEntity()
 {
 	if (m_livingEntityCount < MAX_ENTITIES)
 	{
-		Entity id = m_availableEntities.front();
+		EntityID id = m_availableEntities.front();
 		m_availableEntities.pop();
 		++m_livingEntityCount;
 		return id;
 	}
-	return Entity();
+	return EntityID();
 }
 
 //###########################################################################
 
-void EntityManager::destroyEntity(Entity t_entity)
+void EntityManager::destroyEntity(EntityID t_entity)
 {
 	if (t_entity < MAX_ENTITIES)
 	{
@@ -36,7 +36,7 @@ void EntityManager::destroyEntity(Entity t_entity)
 
 //###########################################################################
 
-void EntityManager::setSignature(Entity t_entity, Signature t_signature)
+void EntityManager::setSignature(EntityID t_entity, Signature t_signature)
 {
 	if (t_entity < MAX_ENTITIES)
 	{
@@ -46,7 +46,7 @@ void EntityManager::setSignature(Entity t_entity, Signature t_signature)
 
 //###########################################################################
 
-Signature EntityManager::getSignature(Entity t_entity)
+Signature EntityManager::getSignature(EntityID t_entity)
 {
 	if (t_entity < MAX_ENTITIES)
 		return m_signatures[t_entity];

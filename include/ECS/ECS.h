@@ -7,27 +7,30 @@
 
 namespace ECS
 {
-
 	class Manager
 	{
 	public:
-		Manager();
+		
+		static Manager* getInstance();
 
-		Entity createEntity();
+		Manager(Manager const&) = delete;
+		void operator=(Manager const&)= delete;
 
-		void destroyEntity(Entity t_entity);
+		EntityID createEntity();
+
+		void destroyEntity(EntityID t_entity);
 
 		template<typename T>
 		void registerComponent();
 
 		template<typename T>
-		void addComponent(Entity t_entity, T t_component);
+		void addComponent(EntityID t_entity, T t_component);
 
 		template<typename T>
-		void removeComponent(Entity);
+		void removeComponent(EntityID);
 
 		template<typename T>
-		T& getComponent(Entity t_entity);
+		T* getComponent(EntityID t_entity);
 
 		template<typename T>
 		ComponentType getComponentType();
@@ -39,6 +42,9 @@ namespace ECS
 		void setSystemSignature(Signature);
 
 	private:
+		friend class DebugInfo;
+		Manager();
+		static Manager* m_instance;
 		std::unique_ptr<ComponentManager> m_componentManager;
 		std::unique_ptr<EntityManager> m_entityManager;
 		std::unique_ptr<SystemManager> m_systemManager;
@@ -55,20 +61,12 @@ namespace ECS
 	//##############################################
 
 	template<typename T>
-	inline void Manager::addComponent(Entity t_entity, T t_component)
+	inline void Manager::addComponent(EntityID t_entity, T t_component)
 	{
 		m_componentManager->addComponent<T>(t_entity, t_component);
-	}
 
-	//##############################################
-
-	template<typename T>
-	inline void Manager::removeComponent(Entity t_entity)
-	{
-		m_componentManager->removeComponent<T>(t_entity);
-
-		Signature signature = m_entityManager->getSignature(t_entity);
-		signature.set(m_componentManager->getComponent<T>(), false);
+		auto signature = m_entityManager->getSignature(t_entity);
+		signature.set(m_componentManager->getComponentType<T>(), true);
 		m_entityManager->setSignature(t_entity, signature);
 
 		m_systemManager->entitySignatureChange(t_entity, signature);
@@ -77,7 +75,21 @@ namespace ECS
 	//##############################################
 
 	template<typename T>
-	inline T& Manager::getComponent(Entity t_entity)
+	inline void Manager::removeComponent(EntityID t_entity)
+	{
+		m_componentManager->removeComponent<T>(t_entity);
+
+		Signature signature = m_entityManager->getSignature(t_entity);
+		signature.set(m_componentManager->getComponentType<T>(), false);
+		m_entityManager->setSignature(t_entity, signature);
+
+		m_systemManager->entitySignatureChange(t_entity, signature);
+	}
+
+	//##############################################
+
+	template<typename T>
+	inline T* Manager::getComponent(EntityID t_entity)
 	{
 		return m_componentManager->getComponent<T>(t_entity);
 	}
@@ -87,7 +99,7 @@ namespace ECS
 	template<typename T>
 	inline ComponentType Manager::getComponentType()
 	{
-		return m_componentManager->getComponent<T>();
+		return m_componentManager->getComponentType<T>();
 	}
 
 	//##############################################
@@ -96,6 +108,12 @@ namespace ECS
 	inline std::shared_ptr<T> Manager::registerSystem()
 	{
 		return m_systemManager->registerSystem<T>();
+	}
+
+	template<typename T>
+	inline void Manager::setSystemSignature(Signature t_signature)
+	{
+		m_systemManager->setSignature<T>(t_signature);
 	}
 }
 #endif

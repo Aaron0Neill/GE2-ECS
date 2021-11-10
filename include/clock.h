@@ -1,7 +1,7 @@
 #ifndef CLOCK_INCLUDE
 #define CLOCK_INCLUDE
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 class Time
 {

@@ -13,16 +13,16 @@ namespace ECS
 	public:
 		EntityManager();
 
-		Entity createEntity();
+		EntityID createEntity();
 
-		void destroyEntity(Entity t_entity);
+		void destroyEntity(EntityID t_entity);
 
-		void setSignature(Entity t_entity, Signature t_signature);
+		void setSignature(EntityID t_entity, Signature t_signature);
 
-		Signature getSignature(Entity t_entity);
+		Signature getSignature(EntityID t_entity);
 
 	private:
-		std::queue<Entity> m_availableEntities;
+		std::queue<EntityID> m_availableEntities;
 
 		std::array<Signature, MAX_ENTITIES> m_signatures;
 

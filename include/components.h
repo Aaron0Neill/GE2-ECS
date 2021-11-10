@@ -1,20 +1,34 @@
 #ifndef COMPONENTS_INCLUDE
 #define COMPONENTS_INCLUDE
+#include <SDL.h>
 
 struct Health
 {
-	int m_health;
+	int health;
 };
 
-struct Lives
+struct Input
 {
-	int m_lives;
+	float x;
+	float y;
 };
 
 struct Position
 {
-	float m_x;
-	float m_y;
+	Position() = default;
+	Position(float t_x, float t_y) : x(t_x), y(t_y) {}
+	float x;
+	float y;
+};
+
+struct RenderInfo
+{
+	RenderInfo() = default;
+	RenderInfo(float t_x, float t_y, float t_w, float t_h, SDL_Color t_c) : p(t_x, t_y), w(t_w), h(t_h), c(t_c) {}
+	Position p;
+	float w;
+	float h;
+	SDL_Color c;
 };
 
 #endif

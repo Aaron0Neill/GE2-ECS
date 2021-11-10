@@ -22,9 +22,9 @@ namespace ECS
 		template<typename T>
 		void setSignature(Signature t_signature);
 
-		void entityDestroyed(Entity t_entity);
+		void entityDestroyed(EntityID t_entity);
 
-		void entitySignatureChange(Entity t_entity, Signature t_signature);
+		void entitySignatureChange(EntityID t_entity, Signature t_signature);
 
 	private:
 		std::unordered_map<const char*, Signature> m_signatures;
@@ -55,7 +55,7 @@ namespace ECS
 	{
 		const char* typeName = typeid(T).name();
 
-		if (m_signatures.count(typeName))
+		if (!m_signatures.count(typeName))
 		{
 			m_signatures.emplace(typeName, t_signature);
 		}
