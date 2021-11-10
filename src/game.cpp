@@ -2,7 +2,8 @@
 #include <iostream>
 
 Game::Game() : 
-	m_running(true)
+	m_running(true), 
+	m_debug(m_renderSystem.get(), m_controlSystem.get())
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();

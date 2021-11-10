@@ -18,19 +18,19 @@ namespace ECS
 
 		EntityID createEntity();
 
-		void destroyEntity(EntityID t_entity);
+		void destroyEntity(EntityID);
 
 		template<typename T>
 		void registerComponent();
 
 		template<typename T>
-		void addComponent(EntityID t_entity, T t_component);
+		void addComponent(EntityID, T);
 
 		template<typename T>
 		void removeComponent(EntityID);
 
 		template<typename T>
-		T* getComponent(EntityID t_entity);
+		T* getComponent(EntityID);
 
 		template<typename T>
 		ComponentType getComponentType();
@@ -42,12 +42,11 @@ namespace ECS
 		void setSystemSignature(Signature);
 
 	private:
-		friend class DebugInfo;
 		Manager();
 		static Manager* m_instance;
-		std::unique_ptr<ComponentManager> m_componentManager;
-		std::unique_ptr<EntityManager> m_entityManager;
-		std::unique_ptr<SystemManager> m_systemManager;
+		ComponentManager* m_componentManager;
+		EntityManager* m_entityManager;
+		SystemManager* m_systemManager;
 	};
 
 	//##############################################

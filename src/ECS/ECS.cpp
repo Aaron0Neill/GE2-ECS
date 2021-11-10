@@ -4,9 +4,9 @@ using namespace ECS;
 Manager* Manager::m_instance{ nullptr };
 
 Manager::Manager() :
-	m_componentManager(std::make_unique<ComponentManager>()),
-	m_entityManager(std::make_unique<EntityManager>()),
-	m_systemManager(std::make_unique<SystemManager>())
+	m_componentManager(new ComponentManager()),
+	m_entityManager(new EntityManager()),
+	m_systemManager(new SystemManager())
 {
 }
 
