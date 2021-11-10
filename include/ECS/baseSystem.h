@@ -8,7 +8,7 @@ namespace ECS
 	class BaseSystem
 	{
 	public:
-		std::set<Entity> m_entities;
+		std::set<EntityID> m_entities;
 	};
 }
 #endif

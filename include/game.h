@@ -3,11 +3,12 @@
 
 #include <SDL.h>
 #include "clock.h"
-#include "ECS/ECS.h"
+#include "ECS/EntityClass.h"
 #include "components.h"
 #include "controlSystem.h"
 #include "renderSystem.h"
 #include <vector>
+#include "debugInfo.h"
 
 class Game
 {
@@ -27,11 +28,9 @@ private:
     SDL_Renderer* m_renderer;
     bool m_running;
     ECS::Manager* m_ecs;
-    ControlSystem* m_controlSystem;
-    RenderSystem* m_renderSystem;
-    std::vector<ECS::Entity> m_entities;
-    ECS::Entity e;
-    bool t;
+    std::shared_ptr<ControlSystem> m_controlSystem;
+    std::shared_ptr<RenderSystem> m_renderSystem;
+    DebugInfo m_debug;
 };
 
 #endif

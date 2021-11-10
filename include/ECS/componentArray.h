@@ -9,7 +9,7 @@ namespace ECS
 	{
 	public:
 		virtual ~IComponentArray() = default;
-		virtual void entityDestroyed(Entity) = 0;
+		virtual void entityDestroyed(EntityID) = 0;
 	};
 
 	//#####################################################
@@ -18,9 +18,9 @@ namespace ECS
 	class ComponentArray : public IComponentArray
 	{
 	public:
-		void insertData(Entity t_entity, T t_component);
+		void insertData(EntityID t_entity, T t_component);
 
-		void removeData(Entity t_entity)
+		void removeData(EntityID t_entity)
 		{
 			// Copy element at end into deleted element's place to maintain density
 			size_t indexOfRemovedEntity = m_entityToIndexMap[t_entity];
@@ -28,7 +28,7 @@ namespace ECS
 			m_components[indexOfRemovedEntity] = m_components[indexOfLastElement];
 
 			// Update map to point to moved spot
-			Entity entityOfLastElement = m_indexToEntityMap[indexOfLastElement];
+			EntityID entityOfLastElement = m_indexToEntityMap[indexOfLastElement];
 			m_entityToIndexMap[entityOfLastElement] = indexOfRemovedEntity;
 			m_indexToEntityMap[indexOfRemovedEntity] = entityOfLastElement;
 
@@ -38,17 +38,17 @@ namespace ECS
 			--m_totalSize;
 		}
 
-		T& getData(Entity t_entity);
+		T* getData(EntityID t_entity);
 
-		void entityDestroyed(Entity t_entity)override;
+		void entityDestroyed(EntityID t_entity)override;
 
 
 	private:
 		std::array<T, MAX_ENTITIES> m_components;
 
-		std::unordered_map<Entity, size_t> m_entityToIndexMap;
+		std::unordered_map<EntityID, size_t> m_entityToIndexMap;
 
-		std::unordered_map<size_t, Entity> m_indexToEntityMap;
+		std::unordered_map<size_t, EntityID> m_indexToEntityMap;
 
 		size_t m_totalSize;
 	};
@@ -56,7 +56,7 @@ namespace ECS
 	//#####################################################
 
 	template<typename T>
-	inline void ComponentArray<T>::insertData(Entity t_entity, T t_component)
+	inline void ComponentArray<T>::insertData(EntityID t_entity, T t_component)
 	{
 		if (!m_entityToIndexMap.count(t_entity))
 		{
@@ -78,15 +78,19 @@ namespace ECS
 	//#####################################################
 
 	template<typename T>
-	inline T& ComponentArray<T>::getData(Entity t_entity)
+	inline T* ComponentArray<T>::getData(EntityID t_entity)
 	{
-		return m_components[m_entityToIndexMap.at(t_entity)];
+		if (m_entityToIndexMap.count(t_entity))
+			return &m_components[m_entityToIndexMap.at(t_entity)];
+		else
+			std::cout << "Entity doesnt contain this data\n";
+		return nullptr;
 	}
 
 	//#####################################################
 
 	template<typename T>
-	inline void ComponentArray<T>::entityDestroyed(Entity t_entity)
+	inline void ComponentArray<T>::entityDestroyed(EntityID t_entity)
 	{
 		if (m_entityToIndexMap.count(t_entity))
 			removeData(t_entity);

@@ -1,7 +1,7 @@
 #include "ECS/systemManager.h"
 using namespace ECS;
 
-void SystemManager::entityDestroyed(Entity t_entity)
+void SystemManager::entityDestroyed(EntityID t_entity)
 {
 	for (auto const& pair : m_systems)
 	{
@@ -13,7 +13,7 @@ void SystemManager::entityDestroyed(Entity t_entity)
 
 //#####################################################
 
-void SystemManager::entitySignatureChange(Entity t_entity, Signature t_signature)
+void SystemManager::entitySignatureChange(EntityID t_entity, Signature t_signature)
 {
 	for (auto const& pair : m_systems)
 	{

@@ -9,7 +9,7 @@ OBJ_DIR			:= ./bin
 SFML_LDFLAGS 	:= -lsfml-graphics -lsfml-window -lsfml-system
 #SDL Include Flags + Lib Flags
 SDL_CFLAGS 		:= $(shell sdl2-config --cflags)
-SDL_LDFLAGS 	:= $(shell sdl2-config --libs) #-lSDL2_image #-lSDL2_ttf
+SDL_LDFLAGS 	:= $(shell sdl2-config --libs) -lSDL2_image -lSDL2_ttf
 
 #final Include Flags (Add SFML or SDL here if needs be)
 CXXFLAGS 		:= -I. -I./include $(SDL_CFLAGS) $(SDL_LDFLAGS)

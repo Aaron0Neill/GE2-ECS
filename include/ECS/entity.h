@@ -5,9 +5,9 @@
 
 namespace ECS
 {
-	using Entity = std::uint32_t;
+	using EntityID = std::uint32_t;
 
-	const Entity MAX_ENTITIES = 50;
+	const EntityID MAX_ENTITIES = 50;
 }
 
 #endif

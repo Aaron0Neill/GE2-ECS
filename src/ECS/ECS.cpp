@@ -22,14 +22,14 @@ Manager* ECS::Manager::getInstance()
 
 //###############################
 
-Entity Manager::createEntity()
+EntityID Manager::createEntity()
 {
 	return m_entityManager->createEntity();
 }
 
 //###############################
 
-void Manager::destroyEntity(Entity t_entity)
+void Manager::destroyEntity(EntityID t_entity)
 {
 	m_componentManager->entityDestroyed(t_entity);
 	m_entityManager->destroyEntity(t_entity);
