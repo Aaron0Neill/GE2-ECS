@@ -19,15 +19,27 @@ public:
 
 	void handleMousePos(int t_x, int t_y);
 
-	void activateButton(ECS::Entity& t_entity);
+	void activateButton();
 
 	void updateInfo();
 
-	void updateCurrent(ECS::Entity t_current);
+	void updateCurrent(ECS::Entity& t_current);
 
 	void render();
 
 	void addSystem(ECS::BaseSystem* t_sys) { m_systems.push_back(t_sys); }
+
+	template<typename T>
+	void toggleComp()
+	{
+		if (m_current)
+			if (m_current->hasComponent<T>())
+				m_current->removeComponent<T>();
+			else
+				m_current->addComponent<T>();
+
+		updateInfo();
+	}
 private:
 	SDL_Renderer* m_renderer;
 	std::vector<ECS::BaseSystem*> m_systems;
@@ -43,6 +55,7 @@ private:
 	SDL_Rect m_currentRect;
 	std::vector<Button*> m_buttons;
 	Button* m_activeButton;
+	ECS::Entity* m_current;
 };
 
 #endif

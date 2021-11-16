@@ -7,6 +7,8 @@
 #include "components.h"
 #include "controlSystem.h"
 #include "renderSystem.h"
+#include "collisionSystem.h"
+#include "aiSystem.h"
 #include <vector>
 #include "debugInfo.h"
 
@@ -30,8 +32,10 @@ private:
     ECS::Manager* m_ecs;
     std::shared_ptr<ControlSystem> m_controlSystem;
     std::shared_ptr<RenderSystem> m_renderSystem;
+    std::shared_ptr<aiSystem> m_aiSystem;
+    std::shared_ptr<CollisionSystem> m_collisionSystem;
     DebugInfo m_debug;
-    ECS::Entity m_player, m_villain, m_cortana, m_dinkiDi;
+    ECS::Entity m_player, m_villain, m_cortana, m_dinkyDi;
 };
 
 #endif

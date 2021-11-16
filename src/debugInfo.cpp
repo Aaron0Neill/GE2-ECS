@@ -7,8 +7,7 @@ void DebugInfo::init(SDL_Renderer* t_renderer)
 	m_systemName[0] = "Render System";
 	m_systemName[1] = "Control System";
 	m_systemName[2] = "AI System";
-	m_systemName[3] = "Health System";
-	m_systemName[3] = "Health System";
+	m_systemName[3] = "Collision System";
 
 	m_font = TTF_OpenFont("assets/calibri.ttf", 20);
 	if (m_font == nullptr)
@@ -42,15 +41,18 @@ void DebugInfo::init(SDL_Renderer* t_renderer)
 
 	m_buttons.push_back(new Button());
 	m_buttons.push_back(new Button());
+	m_buttons.push_back(new Button());
+	m_buttons.push_back(new Button());
 
-	m_buttons[0]->init(m_renderer, m_font, "render", 900 + 10, 450);
-	m_buttons[0]->addDebugFunction(&DebugInfo::updateInfo, this);
+	m_buttons[0]->init(m_renderer, m_font, "render", 910, 450);
 	m_buttons[1]->init(m_renderer, m_font, "Control", 1200 - 138, 450);
-	m_buttons[0]->addDebugFunction(&DebugInfo::updateInfo, this);
+	m_buttons[2]->init(m_renderer, m_font, "AI", 910, 450 + 74);
+	m_buttons[3]->init(m_renderer, m_font, "Collider", 1200 - 138, 450 + 74);
 
-	m_buttons[0]->addHasFunction(&ECS::Entity::hasComponent<Input>);
-	m_buttons[0]->addRemoveFunction(&ECS::Entity::removeComponent<Input>);
-	m_buttons[0]->addFunction(&ECS::Entity::addComponent<Input>);	
+	m_buttons[0]->addDebugFunction(&DebugInfo::toggleComp<RenderColor>, this);
+	m_buttons[1]->addDebugFunction(&DebugInfo::toggleComp<Input>, this);
+	m_buttons[2]->addDebugFunction(&DebugInfo::toggleComp<AI>, this);
+	m_buttons[3]->addDebugFunction(&DebugInfo::toggleComp<Collider>, this);
 }
 
 //********************************************************
@@ -81,12 +83,10 @@ void DebugInfo::handleMousePos(int t_x, int t_y)
 
 //********************************************************
 
-void DebugInfo::activateButton(ECS::Entity& t_entity)
+void DebugInfo::activateButton()
 {
-	if (m_activeButton != nullptr)
-	{
-		m_activeButton->activate(t_entity);
-	}
+	if (m_activeButton)
+		m_activeButton->activate();
 }
 
 //********************************************************
@@ -121,7 +121,7 @@ void DebugInfo::updateInfo()
 				test += ", ";
 		}
 
-		tempSurf = TTF_RenderText_Blended_Wrapped(m_font, test.c_str(), SDL_Color{255,255,255,255}, 150);
+		tempSurf = TTF_RenderText_Blended_Wrapped(m_font, test.c_str(), SDL_Color{255,255,255,255}, 300);
 		
 		m_systemInfo[i] = SDL_CreateTextureFromSurface(m_renderer, tempSurf);
 		SDL_QueryTexture(m_systemInfo[i], NULL, NULL, &m_systemInfoRect[i].w, &m_systemInfoRect[i].h);
@@ -137,8 +137,9 @@ void DebugInfo::updateInfo()
 
 //********************************************************
 
-void DebugInfo::updateCurrent(ECS::Entity t_current)
+void DebugInfo::updateCurrent(ECS::Entity& t_current)
 {
+	m_current = &t_current;
 	SDL_Surface* tempSurf;
 	std::string current = "Current: ";
 	current += m_manager->getName(t_current);

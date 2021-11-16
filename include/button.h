@@ -28,16 +28,9 @@ public:
 
 	void loseFocus();
 
-	void activate(ECS::Entity& t_activeEntity);
+	void activate();
 
 	void addDebugFunction(std::function<void(DebugInfo*)> t_func, DebugInfo* t_caller);
-
-	void addHasFunction(std::function<bool(ECS::Entity*)> t_func) { m_hasComp = t_func; }
-
-	void addFunction(std::function<void(ECS::Entity*)> t_func) { m_addComp = t_func; }
-
-	void addRemoveFunction(std::function<void(ECS::Entity*)> t_func) { m_removeComp = t_func; }
-
 private:
 	void initButtonTexture(SDL_Renderer* t_renderer);
 
@@ -50,9 +43,6 @@ private:
 	int m_sizeIncrease;
 	std::function<void(DebugInfo*)> m_debugFunc;
 	DebugInfo* m_debug;
-	std::function<void(ECS::Entity*)> m_addComp;
-	std::function<void(ECS::Entity*)> m_removeComp;
-	std::function<bool(ECS::Entity*)> m_hasComp;
 };
 
 #endif

@@ -70,15 +70,8 @@ void Button::loseFocus()
 
 //********************************************************
 
-void Button::activate(ECS::Entity& t_activeEntity)
+void Button::activate()
 {
-    if (m_hasComp != nullptr && m_removeComp != nullptr && m_addComp != nullptr)
-    {
-        if (m_hasComp(&t_activeEntity))
-            m_removeComp(&t_activeEntity);
-        else
-            m_addComp(&t_activeEntity);
-    }
     if (m_debug != nullptr)
         m_debugFunc(m_debug);
 }

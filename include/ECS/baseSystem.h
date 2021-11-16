@@ -3,6 +3,7 @@
 
 #include <set>
 #include "ECS/entity.h"
+
 namespace ECS
 {
 	class BaseSystem

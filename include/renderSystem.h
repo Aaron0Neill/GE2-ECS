@@ -11,6 +11,8 @@ public:
 	RenderSystem();
 
 	void render(SDL_Renderer* m_window);
+
+	void highLight(ECS::EntityID t_active);
 private:
 	ECS::Manager* m_instance;
 };

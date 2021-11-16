@@ -24,13 +24,7 @@ namespace ECS {
 		}
 
 		template<typename T>
-		void addComponent()
-		{
-			m_manager->addComponent(m_id, T());
-		}
-
-		template<typename T>
-		void addCustomComponent(T t_component)
+		void addComponent(T t_component = T())
 		{
 			m_manager->addComponent(m_id, t_component);
 		}

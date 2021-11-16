@@ -39,14 +39,21 @@ $(OBJ_DIR)/%.o : ./src/%.cpp
 #whatever follows build: needs to be placed after $@ too
 build: $(OBJ_FILES)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_FILES) $(CXXFLAGS)
+	./$@
 	
 .PHONY: clean
 
 .PHONY: original
 
+.PHONY: remove	
+
 #change the variable depending on if you used a nested folder or not
-clean:
+remove:
 	rm -f $(NESTED_CPP)
 
 original:
 	$(CC) $(CFLAGS) -o $@ $(SRC_FILES) $(CXXFLAGS)
+
+clean:
+	rm -f $(NESTED_CPP)
+	make
