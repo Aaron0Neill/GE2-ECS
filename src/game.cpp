@@ -2,13 +2,15 @@
 #include <iostream>
 
 Game::Game() : 
-	m_running(true), 
-	m_debug(m_renderSystem.get(), m_controlSystem.get())
+	m_running(true),
+	m_player("Player"),
+	m_villain("Villain"),
+	m_cortana("Cortana"),
+	m_dinkiDi("Dinki Di")
 {
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 
-	initWindow();
 
 	m_ecs = ECS::Manager::getInstance();
 
@@ -17,24 +19,31 @@ Game::Game() :
 	m_ecs->registerComponent<Position>();
 	m_ecs->registerComponent<RenderInfo>();
 
+
 	m_controlSystem = m_ecs->registerSystem<ControlSystem>();
 	m_renderSystem = m_ecs->registerSystem<RenderSystem>();
 
-	ECS::Entity player;
-	player.addComponent<Input>();
-	player.addComponent<Health>();
-	player.addComponent<RenderInfo>({0,0, 100, 100, { 255,255,255,255 } });
+	m_debug.addSystem(m_renderSystem.get());
+	m_debug.addSystem(m_controlSystem.get());
+	m_debug.addSystem(m_controlSystem.get());
+	m_debug.addSystem(m_controlSystem.get());
 
-	ECS::Entity villain;
-	villain.addComponent<Health>();
-	villain.addComponent<RenderInfo>({400,200, 100, 100, { 255,0,0,255 } });
+	m_player.addComponent<Input>();
+	m_player.addComponent<Health>();
+	m_player.addCustomComponent<RenderInfo>({0,0, 100, 100, { 255,255,255,255 } });
 
-	ECS::Entity cortana;
-	cortana.addComponent<Health>();
-	cortana.addComponent<RenderInfo>({0,0, 20, 20, { 100,100,255,255 } });
+	m_villain.addComponent<Health>();
+	m_villain.addCustomComponent<RenderInfo>({400,200, 100, 100, { 255,0,0,255 } });
 
-	ECS::Entity dinkyDi;
-	dinkyDi.addComponent<RenderInfo>({0,0, 50, 50, { 100,255,100,255 } });
+	m_cortana.addComponent<Health>();
+	m_cortana.addComponent<Input>();
+	m_cortana.addCustomComponent<RenderInfo>({0,0, 20, 20, { 100,100,255,255 } });
+
+	m_dinkiDi.addCustomComponent<RenderInfo>({0,0, 50, 50, { 100,255,100,255 } });
+
+	initWindow();
+	m_debug.updateCurrent(m_cortana);
+	m_cortana.removeComponent<Input>();
 }
 
 //###############################
@@ -86,6 +95,11 @@ void Game::processEvents(SDL_Event& t_event)
 			break;
 		case SDL_KEYDOWN:
 			break;
+		case SDL_MOUSEMOTION:
+			m_debug.handleMousePos(t_event.button.x, t_event.button.y);
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			m_debug.activateButton(m_player);
 		}
 	}
 }
@@ -113,7 +127,7 @@ void Game::render()
 
 	m_renderSystem->render(m_renderer);
 
-	m_debug.render(m_renderer);
+	m_debug.render();
 
 	SDL_RenderPresent(m_renderer);
 }

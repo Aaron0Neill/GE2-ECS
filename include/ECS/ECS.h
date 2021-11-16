@@ -16,6 +16,10 @@ namespace ECS
 		Manager(Manager const&) = delete;
 		void operator=(Manager const&)= delete;
 
+		void setName(const char* t_name, EntityID t_id);
+
+		const char* getName(EntityID t_id);
+
 		EntityID createEntity();
 
 		void destroyEntity(EntityID);
@@ -47,6 +51,7 @@ namespace ECS
 		ComponentManager* m_componentManager;
 		EntityManager* m_entityManager;
 		SystemManager* m_systemManager;
+		std::unordered_map<EntityID, const char*> m_naming;
 	};
 
 	//##############################################

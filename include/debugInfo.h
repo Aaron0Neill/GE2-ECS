@@ -7,20 +7,30 @@
 #include <array>
 #include "controlSystem.h"
 #include "renderSystem.h"
+#include <string>
+#include "button.h"
 
 class DebugInfo
 {
 public:
-	DebugInfo(RenderSystem* t_render, ControlSystem* t_control) : m_render(t_render), m_control(t_control) {};
+	DebugInfo() = default;
 
 	void init(SDL_Renderer* t_renderer);
 
-	void updateInfo(SDL_Renderer* t_renderer);
+	void handleMousePos(int t_x, int t_y);
 
-	void render(SDL_Renderer* t_renderer);
+	void activateButton(ECS::Entity& t_entity);
+
+	void updateInfo();
+
+	void updateCurrent(ECS::Entity t_current);
+
+	void render();
+
+	void addSystem(ECS::BaseSystem* t_sys) { m_systems.push_back(t_sys); }
 private:
-	RenderSystem* m_render;
-	ControlSystem* m_control;
+	SDL_Renderer* m_renderer;
+	std::vector<ECS::BaseSystem*> m_systems;
 	ECS::Manager* m_manager;
 	static const int SIZE = 4;
 	std::array<SDL_Texture*, SIZE> m_systemHeading;
@@ -29,6 +39,10 @@ private:
 	std::array<SDL_Rect, SIZE> m_systemInfoRect;
 	std::array<std::string, SIZE> m_systemName;
 	TTF_Font* m_font;
+	SDL_Texture* m_currentEntity;
+	SDL_Rect m_currentRect;
+	std::vector<Button*> m_buttons;
+	Button* m_activeButton;
 };
 
 #endif

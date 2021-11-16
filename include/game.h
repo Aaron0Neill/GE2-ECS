@@ -31,6 +31,7 @@ private:
     std::shared_ptr<ControlSystem> m_controlSystem;
     std::shared_ptr<RenderSystem> m_renderSystem;
     DebugInfo m_debug;
+    ECS::Entity m_player, m_villain, m_cortana, m_dinkiDi;
 };
 
 #endif

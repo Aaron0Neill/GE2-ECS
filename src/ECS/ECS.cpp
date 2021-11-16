@@ -22,6 +22,20 @@ Manager* ECS::Manager::getInstance()
 
 //###############################
 
+void ECS::Manager::setName(const char* t_name, EntityID t_id)
+{
+	m_naming[t_id] = t_name;
+}
+
+//###############################
+
+const char* ECS::Manager::getName(EntityID t_id)
+{
+	return m_naming[t_id];
+}
+
+//###############################
+
 EntityID Manager::createEntity()
 {
 	return m_entityManager->createEntity();
