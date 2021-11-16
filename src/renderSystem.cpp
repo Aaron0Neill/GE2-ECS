@@ -26,13 +26,19 @@ void RenderSystem::render(SDL_Renderer* t_renderer)
 
 		SDL_RenderDrawRect(t_renderer, &dim);
 	}
+	highLight();
 }
 
-void RenderSystem::highLight(ECS::EntityID t_active)
+void RenderSystem::setActive(ECS::EntityID t_active)
+{
+	m_activeEntity = t_active;
+}
+
+void RenderSystem::highLight()
 {
 	for (auto& e : m_entities)
 	{
-		if (e == t_active)
+		if (e == m_activeEntity)
 		{
 			SDL_Color& clr = m_instance->getComponent<RenderColor>(e)->c;
 			clr.r = 255;

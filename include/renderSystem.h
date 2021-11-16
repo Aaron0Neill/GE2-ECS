@@ -12,9 +12,11 @@ public:
 
 	void render(SDL_Renderer* m_window);
 
-	void highLight(ECS::EntityID t_active);
+	void setActive(ECS::EntityID t_active);
 private:
+	void highLight();
 	ECS::Manager* m_instance;
+	ECS::EntityID m_activeEntity;
 };
 
 #endif // !RENDER_SYSTEM_INCLUDE

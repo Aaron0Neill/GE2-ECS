@@ -46,7 +46,7 @@ Game::Game() :
 
 	initWindow();
 	m_debug.updateCurrent(m_player);
-	m_renderSystem->highLight(m_player);
+	m_renderSystem->setActive(m_player);
 }
 
 //###############################
@@ -100,22 +100,22 @@ void Game::processEvents(SDL_Event& t_event)
 			if (t_event.key.keysym.sym == '1')
 			{
 				m_debug.updateCurrent(m_player);
-				m_renderSystem->highLight(m_player);
+				m_renderSystem->setActive(m_player);
 			}
 			else if (t_event.key.keysym.sym == '2')
 			{
 				m_debug.updateCurrent(m_villain);
-				m_renderSystem->highLight(m_villain);
+				m_renderSystem->setActive(m_villain);
 			}
 			else if (t_event.key.keysym.sym == '3')
 			{
 				m_debug.updateCurrent(m_cortana);
-				m_renderSystem->highLight(m_cortana);
+				m_renderSystem->setActive(m_cortana);
 			}
 			else if (t_event.key.keysym.sym == '4')
 			{
 				m_debug.updateCurrent(m_dinkyDi);
-				m_renderSystem->highLight(m_dinkyDi);
+				m_renderSystem->setActive(m_dinkyDi);
 			}
 			break;
 		case SDL_MOUSEMOTION:

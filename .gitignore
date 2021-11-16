@@ -16,6 +16,9 @@
 # Mono auto generated files
 mono_crash.*
 
+src/*.o
+src/*/*.o
+
 # Build results
 [Bb]in/
 [Dd]ebug/
